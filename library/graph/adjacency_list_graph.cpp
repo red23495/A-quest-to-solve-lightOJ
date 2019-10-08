@@ -24,7 +24,7 @@ public:
     void add_edge(Node_t node_begin, Node_t node_end, Weight_t weight) override {
         graph[int(node_begin)].push_back({int(node_end), weight});
     }
-    const vector<pair<NodeIndex_t,Weight_t>> get_neighbours(Node_t parent_node) const override {
+    const vector<pair<NodeIndex_t,Weight_t>>& get_neighbours(Node_t parent_node) const override {
         return graph[int(parent_node)];
     }
     virtual ~AdjacencyListGraph() override {};

@@ -18,6 +18,6 @@ public:
         add_edge(node_begin, node_end, weight);
         add_edge(node_end, node_begin, weight);
     }
-    virtual const vector<pair<NodeIndex_t,Weight_t>> get_neighbours(Node_t parent_node) const = 0;
+    virtual const vector<pair<NodeIndex_t,Weight_t>>& get_neighbours(Node_t parent_node) const = 0;
     virtual ~Graph() {};
 };
