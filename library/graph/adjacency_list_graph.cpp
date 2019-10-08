@@ -10,11 +10,12 @@ using namespace std;
 template<typename WeightType = int, typename NodeType = int>
 class AdjacencyListGraph: public Graph<WeightType,NodeType>{
 public:
-    using BaseGraph_t = Graph<WeightType,NodeType>;
     using Weight_t = WeightType;
     using Node_t = NodeType;
+    using Neighbour_t = pair<NodeIndex_t,Weight_t>;
+    using NeighboursList_t = vector<Neighbour_t>;
 private:
-    vector<vector<pair<NodeIndex_t,Weight_t>>> graph;
+    vector<NeighboursList_t> graph;
     int total_nodes;
 public:
     AdjacencyListGraph(unsigned int total_nodes){
@@ -24,10 +25,10 @@ public:
     void add_edge(Node_t node_begin, Node_t node_end, Weight_t weight) override {
         graph[int(node_begin)].push_back({int(node_end), weight});
     }
-    const vector<pair<NodeIndex_t,Weight_t>>& get_neighbours(Node_t parent_node) const override {
+    const NeighboursList_t& get_neighbours(Node_t parent_node) const override {
         return graph[int(parent_node)];
     }
-    inline unsigned int get_total_nodes() const {
+    inline unsigned int get_total_nodes() const override {
         return total_nodes;
     }
     virtual ~AdjacencyListGraph() override {};
