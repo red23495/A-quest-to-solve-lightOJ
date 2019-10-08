@@ -19,5 +19,6 @@ public:
         add_edge(node_end, node_begin, weight);
     }
     virtual const vector<pair<NodeIndex_t,Weight_t>>& get_neighbours(Node_t parent_node) const = 0;
+    virtual unsigned int get_total_nodes() const = 0;
     virtual ~Graph() {};
 };

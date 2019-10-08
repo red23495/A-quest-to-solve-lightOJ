@@ -27,6 +27,9 @@ public:
     const vector<pair<NodeIndex_t,Weight_t>>& get_neighbours(Node_t parent_node) const override {
         return graph[int(parent_node)];
     }
+    inline unsigned int get_total_nodes() const {
+        return total_nodes;
+    }
     virtual ~AdjacencyListGraph() override {};
 };
 
