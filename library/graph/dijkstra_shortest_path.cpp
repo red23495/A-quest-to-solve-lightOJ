@@ -13,6 +13,8 @@ public:
     using CompFunction = bool(*)(HeapElement_t&,HeapElement_t&);
     using WeightAggregateFunction = WeightType(*)(WeightType&,WeightType&);
 private:
+    static constexpr NodeIndex_t PARENT_FLAG = -99;
+    static constexpr NodeIndex_t UNVISITED_FLAG = -1;
     Graph<WeightType,NodeType>* base_graph;
     CompFunction less;
     WeightAggregateFunction aggregate_weight;
@@ -49,14 +51,12 @@ public:
         this->aggregate_weight = aggr;
     }
     void FindShortestPath(NodeType source, NodeType destination){
-        constexpr NodeIndex_t PARENT_FLAG = -99;
-        constexpr NodeIndex_t UNVISITED_FLAG = -1;
         NodeIndex_t source_node = int(source);
         NodeIndex_t destination_node = int(destination);
         priority_queue<HeapElement_t,vector<HeapElement_t>,CompFunctor> heap;
-        vector<NodeIndex_t> visited_from(this->base_graph->get_total_nodes(), UNVISITED_FLAG);
+        vector<NodeIndex_t> visited_from(this->base_graph->get_total_nodes(), this->UNVISITED_FLAG);
         heap.push({{}, source_node});
-        visited_from[source_node] = -PARENT_FLAG;
+        visited_from[source_node] = this->PARENT_FLAG;
         bool is_found = false;
         WeightType final_cost = {};
         while(!is_found && !heap.empty()){
@@ -68,7 +68,7 @@ public:
             for(const auto& child : child_list){
                 NodeIndex_t child_index = child.first;
                 WeightType child_weight = child.second;
-                if(visited_from[child_index] != UNVISITED_FLAG) continue;
+                if(visited_from[child_index] != this->UNVISITED_FLAG) continue;
                 visited_from[child_index] = parent_index;
                 WeightType aggregated_weight = this->aggregate_weight(parent_weight, child_weight);
                 if(child_index == destination_node){
@@ -93,14 +93,19 @@ public:
             this->shortest_path_visited_flag = {};
         }
     }
+    bool is_shortest_path_found() const {
+        return this->is_found;
+    }
+    WeightType get_cost() const {
+        return this->shortest_path_cost;
+    }
+    const list<NodeIndex_t>& trace_shortest_path() const {
+        list<NodeIndex_t> shortest_path_list;
+        NodeIndex_t current_node = this->shortest_path_destination;
+        while(current_node != this->PARENT_FLAG){
+            shortest_path_list.push_front(current_node);
+            current_node = this->shortest_path_visited_flag[current_node];
+        }
+        return shortest_path_list;
+    }
 };
-
-// Implement:
-// 1. get cost
-// 2. get path
-// 3. is found
-
-// int main(){
-//     auto dj = DijkstraShortestPathPlugin<>(nullptr);
-//     return 0;
-// }
