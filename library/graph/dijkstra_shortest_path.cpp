@@ -5,6 +5,10 @@
 
 using namespace std;
 
+// complexity: O(|E| + |V|log|V|)
+
+// copy from here
+
 template<typename WeightType = int, typename NodeType = int>
 class DijkstraShortestPathPlugin{
 public:

@@ -5,8 +5,6 @@
 
 using namespace std;
 
-// complexity: O(|E| + |V|log|V|)
-
 // copy from here
 
 using NodeIndex_t = unsigned int;
